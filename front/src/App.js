@@ -5,7 +5,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import UserCard from './components/UserCard';
 import AddUser from './components/AddUser';
 import { useSelector, useDispatch } from "react-redux"
-import { getUsers } from './JS/actions/actionUser';
+import { getUsers, toggleFalse } from './JS/actions/actionUser';
 
 function App() {
 
@@ -28,15 +28,16 @@ function App() {
         <Button variant="outline-primary button">Contact List</Button>
       </Link>
       <Link to="/Add_User">
-        <Button variant="primary button">Add Contact</Button>
+        <Button variant="primary button" onClick={() => dispatch(toggleFalse())} >Add Contact</Button>
       </Link>
 
       <Routes>
         <Route path="/Users_list" element={<div className="contact-list">
           {users.map((el, i) => <UserCard user={el} key={el._id} />)}
-          </div>} 
-          />
+        </div>}
+        />
         <Route path="/Add_User" element={<AddUser />} />
+        <Route path="/Edit_User" element={<AddUser />} />
       </Routes>
       {console.log(users)}
     </div>

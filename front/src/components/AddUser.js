@@ -1,7 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
+import { useDispatch, useSelector } from "react-redux"
+import { Link } from 'react-router-dom'
+import { addUser, editUser } from '../JS/actions/actionUser'
 
 const AddUser = () => {
+
+    const [newUser, setNewUser] = useState({
+        name: "",
+        email: "",
+        phone: ""
+    })
+
+    const dispatch = useDispatch()
+    const userId = useSelector(state => state.userId)
+    const isEdit = useSelector(state => state.isEdit)
+
+
+    useEffect(() => {
+        if (isEdit) {
+            setNewUser(userId)
+        } else {
+            setNewUser({
+                name: "",
+                email: "",
+                phone: ""
+            })
+        }
+    }, [isEdit, userId])
+
+    const handelChange = (e) => {
+        setNewUser({ ...newUser, [e.target.name]: e.target.value })
+    }
+
+
+
     return (
         <div>
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -26,7 +59,7 @@ const AddUser = () => {
                             color: "white",
                         }}
                     >
-                        Add New Contact
+                        {isEdit ? "Edit Contact" : "Add New Contact"}
                     </Card.Header>
 
                     <Card.Body>
@@ -34,23 +67,29 @@ const AddUser = () => {
                             <Form>
                                 <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                                     <Form.Label >name :</Form.Label>
-                                    <Form.Control type="text" name="name" placeholder="Enter your name" />
+                                    <Form.Control type="text" name="name" value={newUser.name} onChange={handelChange} placeholder="Enter your name" />
                                 </Form.Group>
 
                                 <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                                     <Form.Label >email :</Form.Label>
-                                    <Form.Control type="email" name="email" placeholder="Enter your email" />
+                                    <Form.Control type="email" name="email" value={newUser.email} onChange={handelChange} placeholder="Enter your email" />
                                 </Form.Group>
 
                                 <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                                     <Form.Label >phone :</Form.Label>
-                                    <Form.Control type="text" name="phone" placeholder="Enter your phone" />
+                                    <Form.Control type="text" name="phone" value={newUser.phone} onChange={handelChange} placeholder="Enter your phone" />
                                 </Form.Group>
                             </Form>
                         </Card.Text>
                     </Card.Body>
                     <div className="buttons">
-                        <Button variant="outline-primary edit-button">Add</Button>
+                        <Link to='/Users_list'>
+                            <Button variant="outline-primary edit-button"
+                                onClick={() => { isEdit ? dispatch(editUser(newUser._id, newUser)) : dispatch(addUser(newUser)) }
+                                } >
+                                {isEdit ? "Save" : "Add"}
+                            </Button>
+                        </Link>
                         <Button variant="outline-danger edit-button">Cancel</Button>
                     </div>
                 </Card>

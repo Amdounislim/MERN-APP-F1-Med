@@ -1,6 +1,6 @@
 
 import { applyMiddleware, compose, createStore } from "redux"
-import reducerUser from "../actions/reducerUser"
+import reducerUser from "../reducers/reducerUser"
 import thunk from 'redux-thunk'
 
 // let arr=[thun, midl1, midl2]
